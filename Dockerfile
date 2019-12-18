@@ -5,9 +5,11 @@ RUN apk add --update --no-cache gettext curl && \
     chmod +x ./kubectl && \
     mv ./kubectl /usr/local/bin/kubectl
 
+COPY setup-kubeconfig.sh /
 COPY run-helm.sh /
 
-RUN chmod +x /run-helm.sh
+RUN chmod +x /run-helm.sh && \
+    chmod +x /setup-kubeconfig.sh
 
 ENTRYPOINT ["/run-helm.sh"]
 
