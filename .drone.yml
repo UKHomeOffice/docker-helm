@@ -18,7 +18,21 @@ pipeline:
         - push
         - tag
 
-  docker-push:
+  docker-tag:
+    image: docker:19.03.5
+    environment:
+      docker_username: ukhomeofficedigital+helm
+    secrets:
+      - docker_password
+    commands:
+      - docker login -u="${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
+      - docker tag ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
+      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA}
+      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
+    when:
+      event: tag
+
+  docker-latest:
     image: docker:19.03.5
     environment:
       docker_username: ukhomeofficedigital+helm
@@ -27,9 +41,9 @@ pipeline:
     commands:
       - docker login -u="${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
       - docker tag ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} ${DOCKER_REGISTRY}/${DOCKER_REPO}:latest
-      - docker tag ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
       - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA}
       - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:latest
-      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
     when:
-      event: tag
+      event: push
+      branch: master
+
