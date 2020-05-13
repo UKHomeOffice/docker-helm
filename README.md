@@ -2,7 +2,10 @@
 
 Docker image for client-side only Helm (v3+).
 
+Includes support for declarative Helm deployments with Helmfile, helm-diff, helm-secrets, helm-git and helm-s3 plugins.
+
 This image sets up a kube config file that is then used by helm.
+
 
 The kube config file is populated from environment variables.
 
