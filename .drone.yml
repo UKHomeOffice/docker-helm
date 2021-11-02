@@ -1,49 +1,64 @@
-matrix:
-  DOCKER_REPO:
-    - ukhomeofficedigital/helm
-  DOCKER_REGISTRY:
-    - quay.io
-  DOCKER_USERNAME:
-    - ukhomeofficedigital+helm
-  DOCKER_HOST:
-    - tcp://172.17.0.1:2375
-pipeline:
-  docker-build:
-    image: docker:19.03.5
-    commands:
-      - docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} .
-    when:
-      event:
-        - pull_request
-        - push
-        - tag
+kind: pipeline
+name: default
+type: kubernetes
 
-  docker-tag:
-    image: docker:19.03.5
-    environment:
-      docker_username: ukhomeofficedigital+helm
-    secrets:
-      - docker_password
-    commands:
-      - docker login -u="${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-      - docker tag ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
-      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA}
-      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_TAG}
-    when:
-      event: tag
+platform:
+  os: linux
+  arch: amd64
 
-  docker-latest:
-    image: docker:19.03.5
-    environment:
-      docker_username: ukhomeofficedigital+helm
-    secrets:
-      - docker_password
-    commands:
-      - docker login -u="${DOCKER_USERNAME}" -p=$${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-      - docker tag ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA} ${DOCKER_REGISTRY}/${DOCKER_REPO}:latest
-      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:$${DRONE_COMMIT_SHA}
-      - docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:latest
-    when:
-      event: push
-      branch: master
+environment:
+  DOCKER_REPO: ukhomeofficedigital/helm
+  DOCKER_REGISTRY: quay.io
+  DOCKER_USERNAME: ukhomeofficedigital+helm
 
+
+steps:
+- name: docker-build
+  pull: if-not-exists
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+  commands:
+  - docker stats --no-stream
+  # wait for docker service to be up before running docker build  
+  - n=0; while [ "$n" -lt 60 ] && [ ! docker stats --no-stream ]; do n=$(( n + 1 )); sleep 1; done
+  - docker build -t quay.io/ukhomeofficedigital/helm:$${DRONE_COMMIT_SHA} .
+  when:
+    event:
+    - pull_request
+    - push
+    - tag
+
+- name: docker-tag
+  pull: if-not-exists
+  image: plugins/docker
+  settings:
+    registry: quay.io
+    repo: quay.io/ukhomeofficedigital/helm
+    tags: ${DRONE_TAG}
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    docker_username: ukhomeofficedigital+helm
+  when:
+    event:
+    - tag
+
+- name: docker-latest
+  pull: if-not-exists
+  image: plugins/docker
+  settings:
+    registry: quay.io
+    repo: quay.io/ukhomeofficedigital/helm
+    tags: latest
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    docker_username: ukhomeofficedigital+helm
+  when:
+    branch:
+    - master
+    event:
+    - push
+
+services:
+  - name: docker
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
