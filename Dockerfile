@@ -47,11 +47,3 @@ RUN chmod +x /run-helm.sh && \
 ENTRYPOINT ["/run-helm.sh"]
 
 CMD ["--help"]
-
-
-It looks like you are requesting someone from the support team to attend a testing session.
-This is not how ACP support works: we respond to incidents or work on requests to provide a solution to a requirement.
-The Palo Alto devices have been set to allow traffic from TGW and were successfully tested a few months ago and a few weeks ago.
-There is no known reason to believe that traffic would have stopped flowing.
-Therefore no one will be attending the 4pm session tomorrow.
-However, if you do find that traffic does not flow and you suspect that it is an issue with APC, please raise an incident and someone will respond to it straight away.
