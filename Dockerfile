@@ -33,10 +33,10 @@ RUN eval $(helm env | grep HELM_PLUGINS) && \
     helm quay upgrade-plugin ${HELM_QUAY_APPR_VERSION}
 
 # Install Helm pugins
-RUN helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} && \
-    helm plugin install https://github.com/futuresimple/helm-secrets --version ${HELM_SECRETS_VERSION} && \
-    helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION} && \
-    helm plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION}
+RUN helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION}
+RUN helm plugin install https://github.com/futuresimple/helm-secrets --version ${HELM_SECRETS_VERSION}
+RUN helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION}
+RUN helm plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION}
 
 COPY setup-kubeconfig.sh /
 COPY run-helm.sh /
