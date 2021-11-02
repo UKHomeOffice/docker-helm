@@ -10,15 +10,14 @@ environment:
   DOCKER_REPO: ukhomeofficedigital/helm
   DOCKER_REGISTRY: quay.io
   DOCKER_USERNAME: ukhomeofficedigital+helm
-  DOCKER_HOST: tcp://172.17.0.1:2375
 
 
 steps:
 - name: docker-build
   pull: if-not-exists
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-  environment:
-    DOCKER_HOST: tcp://docker:2375
+  # environment:
+  #   DOCKER_HOST: tcp://docker:2375
   commands:
   - docker stats --no-stream
   # wait for docker service to be up before running docker build  
@@ -65,5 +64,5 @@ steps:
 services:
   - name: docker
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
-    environment:
-      DOCKER_TLS_CERTDIR: ""
+    # environment:
+    #   DOCKER_TLS_CERTDIR: ""
