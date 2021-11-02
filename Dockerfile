@@ -2,7 +2,7 @@ FROM alpine/helm:3.7.1
 
 ARG HELMFILE_VERSION=0.141.0
 ARG HELM_DIFF_VERSION=3.1.3
-ARG HELM_SECRETS_VERSION=2.0.2
+ARG HELM_SECRETS_VERSION=v3.9.1
 ARG HELM_S3_VERSION=0.10.0
 ARG HELM_GIT_VERSION=0.11.1
 ARG HELM_QUAY_VERSION=5e3f456fa6ab91e7a0d1a9c0880f562a6d6f9165
@@ -34,7 +34,7 @@ RUN eval $(helm env | grep HELM_PLUGINS) && \
 
 # Install Helm pugins
 RUN helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION}
-RUN helm plugin install https://github.com/futuresimple/helm-secrets --version ${HELM_SECRETS_VERSION}
+RUN helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
 RUN helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION}
 RUN helm plugin install https://github.com/aslafy-z/helm-git.git --version ${HELM_GIT_VERSION}
 
