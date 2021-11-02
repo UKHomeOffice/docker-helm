@@ -1,4 +1,4 @@
-FROM alpine/helm:3.7.1
+FROM alpine/helm:3.6.3
 
 ARG HELMFILE_VERSION=0.141.0
 ARG HELM_DIFF_VERSION=v3.1.3
@@ -11,7 +11,7 @@ ARG YQ_VERSION=v4.14.1
 ARG KUBECTL_VERSION=v1.19.15
 # latest stable kubectl version can be found at: curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
 
-RUN apk add --update --no-cache git bash jq gettext curl wget && \
+RUN apk add --update --no-cache git bash jq gettext curl && \
     curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
     chmod +x ./kubectl && \
     mv ./kubectl /usr/local/bin/kubectl && \
