@@ -2,4 +2,4 @@
 
 source /setup-kubeconfig.sh
 
-exec /usr/bin/helm $*
+exec /usr/bin/helm "$@"
