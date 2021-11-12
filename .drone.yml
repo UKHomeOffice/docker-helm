@@ -27,6 +27,18 @@ steps:
     - push
     - tag
 
+- name: scan
+  pull: if-not-exists
+  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+  pull: always
+  environment:
+    IMAGE_NAME: quay.io/ukhomeofficedigital/helm:$${DRONE_COMMIT_SHA}
+  when: 
+    event:
+    - pull_request
+    - push
+    - tag
+
 - name: docker-tag
   pull: if-not-exists
   image: plugins/docker
@@ -62,3 +74,9 @@ steps:
 services:
   - name: docker
     image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
+
+  - name: anchore-submission-server
+    image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/anchore-submission:latest
+    pull: always
+    commands:
+    - /run.sh server
