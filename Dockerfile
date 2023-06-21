@@ -85,9 +85,9 @@ RUN set -euxo pipefail ;\
   #Diff
   helm plugin install https://github.com/databus23/helm-diff --version v${HELM_PLUGIN_DIFF_VERSION} ;\
   #git
-  helm plugin install https://github.com/aslafy-z/helm-git.git --version v${HELM_PLUGIN_GIT_VERSION} ;\
+  helm plugin install https://github.com/aslafy-z/helm-git --version v${HELM_PLUGIN_GIT_VERSION} ;\
   #S3
-  helm plugin install https://github.com/hypnoglow/helm-s3.git --version v${HELM_PLUGIN_S3_VERSION} ;\
+  helm plugin install https://github.com/hypnoglow/helm-s3 --version v${HELM_PLUGIN_S3_VERSION} ;\
   #Secrets
   helm plugin install https://github.com/jkroepke/helm-secrets --version v${HELM_PLUGIN_SECRET_VERSION} ;\
   helm version ;\

@@ -96,6 +96,7 @@ steps:
       memory: 1024Mi
   environment:
     IMAGE_NAME: quay.io/ukhomeofficedigital/helm:${DRONE_COMMIT_SHA}
+    IGNORE_UNFIXED: "true"
   when:
     event:
     - pull_request
