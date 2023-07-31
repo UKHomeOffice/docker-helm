@@ -114,7 +114,7 @@ steps:
   - docker push $${OCI_REGISTRY}/$${OCI_IMAGE_REPO} --all-tags
   environment:
     OCI_REPO_TOKEN:
-      from_secret: DOCKER_TOKEN
+      from_secret: docker_password
   when:
     branch:
     - main
