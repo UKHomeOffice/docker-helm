@@ -26,3 +26,14 @@ Finally, if `KUBE_CERTIFICATE_AUTHORITY_DATA` is defined, it is assumed to conta
 The image runs `helm` and all parameters are passed to it.
 
 This image is published on [quay.io](https://quay.io/repository/ukhomeofficedigital/helm)
+
+
+## Versioning
+The container image will be based on the HELM release version as outlined in https://github.com/helm/helm/releases
+
+However, due to automated ACP build processes and other dependencies such as kubectl the tag following tag format will be used:
+`<Drone Version>-build.x` where x is an incrementing integer
+
+Upon satisfactory testing, the build version will be promoted to both the helm version tag and latest in quay.io
+
+Versioning will be maintained by updating the `.semver` file. E.g. should HELM 3.99.999 release, the `.semver` file will need to be `3.99.999-build.0`
