@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -eo pipefail
 
 #Print HELM and Kubectl Versions:
 echo 'helm version::'

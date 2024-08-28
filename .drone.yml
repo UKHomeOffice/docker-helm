@@ -124,23 +124,24 @@ steps:
       exclude:
       - promote
 
-- name: Push Semver and Tag Repo - force
-  pull: Always
-  image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/acp-ci-tools
-  resources:
-    limits:
-      cpu: 100
-      memory: 256Mi
-  commands:
-  - git branch --set-upstream-to origin/${DRONE_COMMIT_BRANCH} 
-  - git push --force
-  - git tag -a $(cat .semver) -m "[CI SKIP] - new tag - $(cat .semver)"
-  - git push --force origin $(cat .semver)
-  when:
-    branch:
-    - main
-    event:
-    - push
+# This doesn't work due to drone user not being able to push
+# - name: Push Semver and Tag Repo - force
+#   pull: Always
+#   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/acp-ci-tools
+#   resources:
+#     limits:
+#       cpu: 100
+#       memory: 256Mi
+#   commands:
+#   - git branch --set-upstream-to origin/${DRONE_COMMIT_BRANCH} 
+#   - git push --force
+#   - git tag -a $(cat .semver) -m "[CI SKIP] - new tag - $(cat .semver)"
+#   - git push --force origin $(cat .semver)
+#   when:
+#     branch:
+#     - main
+#     event:
+#     - push
 
 services:
 - name: docker
