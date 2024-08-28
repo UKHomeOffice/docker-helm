@@ -1,4 +1,5 @@
 ## Whitelist current vulnerability of helm plugin https://github.com/hypnoglow/helm-s3 - review in next version update
+## All plugins to be reviewed
 #containerd
 CVE-2022-23471
 CVE-2023-25153
