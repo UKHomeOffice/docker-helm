@@ -95,5 +95,7 @@ RUN set -euxo pipefail ;\
   helm version ;\
   kubectl version --client ;
 
+oops
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["--help"]
