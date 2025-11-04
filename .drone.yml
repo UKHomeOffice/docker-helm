@@ -63,7 +63,7 @@ steps:
       exclude:
       - promote
 
-- name: Promote tag to Helm Version and Latest (Quay)
+- name: Promote tag to Helm Version (Quay)
   pull: Always
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   resources:
@@ -76,7 +76,6 @@ steps:
   - docker login -u="$${OCI_REPO_USERNAME}" -p=$${OCI_REPO_TOKEN} $${OCI_REGISTRY}
   - docker pull $${OCI_REGISTRY}/$${OCI_IMAGE_REPO}:$$(cat .semver)
   - docker tag $${OCI_REGISTRY}/$${OCI_IMAGE_REPO}:$$(cat .semver) $${OCI_REGISTRY}/$${OCI_IMAGE_REPO}:$$(cat .semver | cut -d "-" -f -1)
-  - docker tag $${OCI_REGISTRY}/$${OCI_IMAGE_REPO}:$$(cat .semver) $${OCI_REGISTRY}/$${OCI_IMAGE_REPO}:latest
   - docker push $${OCI_REGISTRY}/$${OCI_IMAGE_REPO} --all-tags
   environment:
     OCI_REPO_TOKEN:
