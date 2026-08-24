@@ -10,7 +10,7 @@ platform:
 resources:
   requests:
     cpu: 1000
-    memory: 1024Mi
+    memory: 2048Mi
 
 environment:
   OCI_REGISTRY: quay.io
@@ -48,8 +48,12 @@ steps:
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   resources:
     limits:
-      cpu: 1000
-      memory: 1024Mi
+      cpu: 2000
+      # Compiling kubectl from the Kubernetes source tree peaks at ~2.3GB
+      # (measured). At the previous 1024Mi the Go compiler was OOM-killed on
+      # k8s.io/kubectl/pkg/describe with "signal: killed". Keep headroom above
+      # the measured peak -- it moves with Go version and parallelism.
+      memory: 4096Mi
   commands:
   # wait for docker service to be up before running docker build
   - /usr/local/bin/wait
@@ -147,5 +151,8 @@ services:
   image: 340268328991.dkr.ecr.eu-west-2.amazonaws.com/acp/dind
   resources:
     limits:
-      cpu: 1000
-      memory: 1024Mi
+      cpu: 2000
+      # `docker build` runs against this daemon, so the compile happens in
+      # THIS container -- this is the limit that actually bit. See the build
+      # step above.
+      memory: 4096Mi
